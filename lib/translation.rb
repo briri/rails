@@ -59,7 +59,7 @@ module TranslationIO
             })
           end
           Proxy.bindtextdomain(@config.text_domain, {
-            type: :chain
+            type: :chain,
             chain: domains
           })
 
