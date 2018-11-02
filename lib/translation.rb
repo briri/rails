@@ -48,27 +48,15 @@ module TranslationIO
 
         # include is private until Ruby 2.1
         Proxy.send(:include, GetText)
-        Proxy.send(:include, FastGettext::TranslationMultidomain)
 
         if @config.multi_domain
           # TODO: Here we iterate over the langauges to initialize them
-          domains = @config.domain_names.map do |domain|
-            FastGettext::TranslationRepository.build(domain, {
-              path:           @config.locales_path,
+          @config.domain_names.each do |domain|
+            Proxy.bindtextdomain(domain, {
+              path: @config.locales_path,
               output_charset: @config.charset
-            })
+              })
           end
-          Proxy.bindtextdomain(@config.text_domain, {
-            type: :chain,
-            chain: domains
-          })
-
-          #@config.domain_names.each do |domain|
-          #  Proxy.bindtextdomain(domain, {
-          #    path: @config.locales_path,
-          #    output_charset: @config.charset
-          #    })
-          #end
         else
           Proxy.bindtextdomain(@config.text_domain, {
             :path           => @config.locales_path,
